@@ -11,10 +11,116 @@
 <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 
+<script src="js/jquery.rwdImageMaps.js"></script>
+<script src="js/jquery.maphilight.js"></script>
+
+
+<script language="javascript">
+ var AEdo = new Array();
+      var amun = new Array();
+	  
+	  amun[1] = new prop('01',1,'Item01');
+      amun[2] = new prop('01',2,'Item02');
+	  amun[3] = new prop('01',3,'Item03');
+      
+      amun[4] = new prop('02',4,'Item04');
+      
+      amun[5] = new prop('02',5,'Item05');
+      
+      amun[6] = new prop('02',6,'Item06');
+      
+      amun[7] = new prop('02',7,'Item07');
+      
+      amun[8] = new prop('03',8,'Item08');
+      
+      amun[9] = new prop('03',9,'Item09');
+
+	  
+	    AEdo[1] = "Zona de uso comercial";
+      
+          AEdo[2] = "Zona de uso mixto";
+      
+          AEdo[3] = "Zona de recreación pública";
+
+
+$(document).ready(function(e) {
+    $('img[usemap]').rwdImageMaps();
+	$('img[usemap]').maphilight();
+});
+
+
+ function prop(a,b,c){
+        this.Estado = a;
+        this.Municipio = b;
+        this.Descripcion = c;
+      }
+
+      function actualiza(qedo){
+        if( qedo.substring(0,1) == 0 )
+          vedo = qedo.substring(1,2)
+        else
+          vedo = qedo.substring(0,2)
+        document.frmguias.txtedo.value = AEdo[vedo];
+        document.frmguias.cmbedo.value = qedo;
+        var ntedo = 0;
+        document.frmguias.cmbmuni.length=0;
+        for(var x=1; x<=amun.length-1; x++){
+          if(amun[x].Estado == qedo){
+            document.frmguias.cmbmuni.length = document.frmguias.cmbmuni.length+1;
+            document.frmguias.cmbmuni.options[document.frmguias.cmbmuni.length-1].value=amun[x].Municipio;
+            document.frmguias.cmbmuni.options[document.frmguias.cmbmuni.length-1].text=amun[x].Descripcion;
+          }
+        }
+      }
+
+      function ok(){
+        if(document.frmguias.cmbmuni.length == 0){
+          alert("Lo sentimos, " + document.frmguias.txtedo.value + " no cuenta actualmente con guias");
+        }else{
+          if( document.frmguias.cmbmuni.selectedIndex == -1)
+            alert("Seleccione un municipio");
+          else{
+            if( document.frmguias.cmbmuni.options[document.frmguias.cmbmuni.selectedIndex].value != 0)
+              document.forms[0].submit();
+            else
+              alert("Seleccione un estado");
+          }
+        }
+      }
+  //-->
+  
+  
+  
+  
+  </script>
+
+
+<style type="text/css">
+
+figure{
+cursor:pointer;
+overflow:hidden;
+border:5px solid white;
+-webkit-box-shadow:0 0 22px rgba(0,0,0,.5);	
+width:40%;
+}
+
+figure img {
+	-webkit-transition:all 1.3s;
+	
+}
+
+figure:hover img{
+-webkit-transform:scale(1.3);	
+}
+
+
+</style>
+
 </head> 
 <body> 
 
-<div data-role="page" id="page2" style="background-image: url('images/02.png'); background-attachment: fixed; background-repeat: no-repeat; background-size: 100% 100%;">
+<div data-role="page" id="page" style="background-image: url('images/02.png'); background-attachment: fixed; background-repeat: no-repeat; background-size: 100% 100%;">
 
 	
    <div data-role="header" data-theme="b" data-position="fixed">
@@ -23,13 +129,13 @@
         <a href="#search" class="ui-btn ui-icon-search ui-btn-icon-notext ui-corner-all">No text</a>
 	</div>
 	<div data-role="content">	
-			CONTENIDO
+			<a  href="#page2" data-role="button">SIGUIENTE</a>
 	</div>
 	<div data-role="footer" data-theme="b" data-position="fixed">
 		<h4>Pie de página</h4>
 	</div>
     
-    <div data-role="panel" id="bars" data-theme="b" data-display="push">
+    <div data-role="panel" id="bars" data-theme="b" data-display="overlay">
     <ul data-role="listview">
     <li data-icon="bars"><a href="#">Back</a></li>
     <li data-icon="action"><a href="#">Audi</a></li>
@@ -69,6 +175,8 @@
     <li><a href="#">Volvo</a></li>
 </ul>
    
+   
+   
     </div><!-- /panel --> 
 
 
@@ -88,8 +196,57 @@
 		<h1>Página dos</h1>
 	</div>
 	<div data-role="content">	
-		Contenido		
-	</div>
+		
+        
+      <figure>  
+    <img id="usemap" src="images/map.png" alt="mapa5" width="757" height="521" usemap="#Map" style="max-width:100%;">
+    </figure>
+    
+    <map name="Map">
+      <area shape="poly" coords="218,201,224,200,232,200,243,199,249,199,261,201,273,201,275,199,271,193,267,188,259,183,250,180,245,173,240,172,217,197,227,185,234,180" href="javascript:actualiza('02');" alt="Zona Mixto">
+      <area shape="poly" coords="429,292,437,290,449,289,461,285,475,281,484,277,488,273,489,269,472,270,455,270,445,270,437,270,433,268,420,264,418,267,409,274,407,278,415,288,409,283,416,290,418,291,421,290,423,291" href="javascript:actualiza('01');" alt="Zona Comercial">
+    </map>
+    
+    
+
+    
+    <div style="float:left;">
+    
+    
+     <form name="frmguias" action="#" method="POST">
+    <input type="hidden" name="cmbedo">
+
+ <table border="0" cellspacing="2" cellpadding="0">
+
+<tr>
+              <td class="letraverdanamaschica">Estado <br>
+                <input type="text" name="txtedo" value="" size="22 " onFocus="blur();">
+              </td>
+    </tr>
+            
+            
+            <tr>
+              <td class="letraverdanamaschica">Delegaciones ó Municipios <br>
+               <!-- <select name="cmbmuni" size="5" >
+                  <option selected="" value="0"> Seleccione primero un estado... </option>
+                </select> -->
+                
+       <select name="cmbmuni">
+      <option selected="" value="0"> Seleccione primero un estado... </option>
+    </select>
+              </td>
+            </tr>
+</table>
+
+</form>
+    
+    
+    
+    </div>
+    
+
+    
+     </div>
 	<div data-role="footer">
 		<h4>Pie de página</h4>
 	</div>
